@@ -1,0 +1,25 @@
+{
+  "users": [
+    {
+      "id": "1",
+      "firstName": "John",
+      "lastName": "Doe",
+      "password": "password123",
+      "email": "john@example.com"
+    },
+    {
+      "id": "08fd",
+      "firstName": "anouar",
+      "lastName": "charai",
+      "email": "anouar@gmail.com",
+      "password": "anwar36flow"
+    },
+    {
+      "id": "6060",
+      "firstName": "Cleo",
+      "lastName": "Blake",
+      "email": "pekelulit@mailinator.com",
+      "password": "Pa$$w0rd!"
+    }
+  ]
+}
