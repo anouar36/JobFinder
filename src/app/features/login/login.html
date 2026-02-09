@@ -1,54 +1,44 @@
 <div class="login-container">
+  
+  <!-- Logo Section -->
+  <div class="brand-header">
+    <div class="logo-icon">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+        <path fill-rule="evenodd" d="M7.5 6v.75H5.513c-.96 0-1.764.724-1.865 1.679l-1.263 12A1.875 1.875 0 0 0 4.25 22.5h15.5a1.875 1.875 0 0 0 1.865-2.071l-1.263-12a1.875 1.875 0 0 0-1.865-1.679H16.5V6a4.5 4.5 0 1 0-9 0ZM12 3a3 3 0 0 0-3 3v.75h6V6a3 3 0 0 0-3-3Zm-3 8.25a3 3 0 1 0 6 0v-.75a.75.75 0 0 1 1.5 0v.75a4.5 4.5 0 1 1-9 0v-.75a.75.75 0 0 1 1.5 0v.75Z" clip-rule="evenodd" />
+      </svg>        
+    </div>
+    <span class="brand-name">JobFinder</span>
+  </div>
+
   <div class="login-card">
     
-    <div class="logo">
-      <div class="logo-icon">B</div>
-    </div>
-
     <h1 class="title">Welcome Back</h1>
-    <p class="subtitle">Sign in to your Brecoulage account</p>
+    <p class="subtitle">Sign in to your account to continue searching for jobs</p>
     
     <!-- Show Social Buttons/Login only if currentView is 'login' -->
-    <ng-container *ngIf="currentView === 'login'">
-      <div class="social-buttons">
-          <button (click)="loginRole('admin')" type="button" class="btn-social">
-            Admin
-          </button>
-
-          <button (click)="loginRole('client')" type="button" class="btn-social">
-            client
-          </button>
-
-          <button (click)="loginRole('warehouse_manager')" type="button" class="btn-social">
-            warehouse_manager
-          </button>
-      </div>
-
-      <form (ngSubmit)="onSubmit()" class="login-form" style="margin-top: 20px;">
+    <ng-container >
+      <form (ngSubmit)="onSubmit()" class="login-form">
         <div class="form-group">
-          <label for="username">Username / Email</label>
+          <label for="email">Email Address</label>
           <input 
-            type="text"
-            id="username"
-            name="username"
-            [(ngModel)]="loginData.username"
-            placeholder="username"
+            type="email"
+            id="email"
+            name="email"
+            [(ngModel)]="loginData.email"
+            placeholder="your@email.com"
             required
             [disabled]="isLoading"
           />
         </div>
 
         <div class="form-group">
-          <div class="password-header">
-            <label for="password">Password</label>
-            <a href="javascript:void(0)" (click)="switchView('forgot-password')" class="forgot-link">Forgot?</a>
-          </div>
+          <label for="password">Password</label>
           <input
             type="password"
             id="password"
             name="password"
             [(ngModel)]="loginData.password"
-            placeholder="••••••••"
+            placeholder="........."
             required
             [disabled]="isLoading"
           />
@@ -64,57 +54,30 @@
 
         <button 
           type="submit" 
+          (click)="onSubmit()"
           class="btn-primary" 
-          [disabled]="isLoading || !loginData.username || !loginData.password">
+          [disabled]="isLoading || !loginData.email || !loginData.password">
           {{ isLoading ? 'Signing in...' : 'Sign In' }}
         </button>
+
+        <div class="signup-footer">
+          <!-- Separator Line -->
+           <div class="separator"></div>
+           
+           <p class="signup-text">
+             Don't have an account? <a href="javascript:void(0)" (click)="switchView('register')" class="signup-link">Create one</a>
+           </p>
+
+           <div class="demo-credentials">
+             <p class="demo-label">Demo Credentials:</p>
+             <div class="demo-box">
+               <p><strong>Email:</strong> john@example.com</p>
+               <p><strong>Password:</strong> password123</p>
+             </div>
+           </div>
+        </div>
+
       </form>
-    </ng-container>
-
-    <!-- Forgot Password View -->
-    <ng-container *ngIf="currentView === 'forgot-password'">
-      <div class="login-form">
-        <h2 style="font-size: 18px; margin-bottom: 8px; color: #1f2937; text-align: center;">Reset Password</h2>
-        <p style="font-size: 14px; color: #6b7280; text-align: center; margin-bottom: 20px;">
-          Enter your email address and we'll send you a link to reset your password.
-        </p>
-
-        <form (ngSubmit)="onResetPassword()">
-          <div class="form-group">
-            <label for="resetEmail">Email Address</label>
-            <input 
-              type="email"
-              id="resetEmail"
-              name="resetEmail"
-              [(ngModel)]="resetEmail"
-              placeholder="name@company.com"
-              required
-              [disabled]="isLoading"
-            />
-          </div>
-
-          <div *ngIf="errorMessage" class="error-message">
-            {{ errorMessage }}
-          </div>
-          
-          <div *ngIf="resetMessage" class="success-message" style="margin-top: 10px; padding: 10px; background-color: #f0fdf4; color: #166534; border-radius: 6px; font-size: 14px;">
-            {{ resetMessage }}
-          </div>
-
-          <button 
-            type="submit" 
-            class="btn-primary" 
-            [disabled]="isLoading">
-            {{ isLoading ? 'Sending...' : 'Send Reset Link' }}
-          </button>
-
-          <div style="text-align: center; margin-top: 16px;">
-            <a href="javascript:void(0)" (click)="switchView('login')" class="forgot-link" style="color: #6b7280;">
-              Back to Sign In
-            </a>
-          </div>
-        </form>
-      </div>
     </ng-container>
   </div>
 </div>

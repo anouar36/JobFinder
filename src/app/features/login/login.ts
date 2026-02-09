@@ -3,13 +3,15 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Auth } from '../../core/services/auth';  
 import { Router, RouterModule } from '@angular/router';
+import { LoginRequest } from '../../core/models/auth.models';  
+
 import { first } from 'rxjs';
 
 @Component({
   selector: 'app-login',
-  imports: [],
+  imports: [CommonModule, FormsModule, RouterModule],
   templateUrl: './login.html',
-  styleUrl: './login.css',
+  styleUrls: ['./login.css'],
 })
 export class Login {
 
@@ -20,20 +22,29 @@ export class Login {
   isLoading: boolean = false;
   errorMessage: string = '';
   successMessage: string = '';
+  resetMessage: string = '';
+  resetEmail: string = '';
+
+  loginData: LoginRequest = {
+    email: '',
+    password: ''
+  };
   
 
   onSubmit() {
     this.isLoading = true;
     this.errorMessage = '';
     this.successMessage = '';
+    this.resetMessage = '';
 
-    if(!this.email || !this.password){
+
+    if(!this.loginData.email || !this.loginData.password){
       this.errorMessage = 'Please fill in all required fields.';
       this.isLoading = false;
       return;
     }
 
-    this.authService.login(this.email, this.password).subscribe({
+    this.authService.login(this.loginData.email, this.loginData.password).subscribe({
       next: (response) => {
         console.log('Login successful:', response); 
         this.successMessage = 'Login successful! Redirecting...';
@@ -47,5 +58,19 @@ export class Login {
       }
     });
   }  
+
+  switchView(rote:string){
+    if(rote=='login'){
+      this.router.navigate(['/login']);
+    }else{
+      this.router.navigate(['/register']);
+    }
+  }
+  onResetPassword() {
+    this.isLoading = true;
+    this.errorMessage = '';
+    this.successMessage = '';
+    this.resetMessage = '';
+}
 
 }

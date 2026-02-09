@@ -1,75 +1,78 @@
-/* Import modern font to match the design */
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
 
 * {
   box-sizing: border-box;
 }
 
+:host {
+  display: block;
+  background-color: #f8f9fa; /* Very light cool gray background */
+}
+
 .login-container {
   min-height: 100vh;
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
-  /* Soft background to make the card pop */
-  background: #f0f2f5; 
   padding: 20px;
   font-family: 'Inter', sans-serif;
 }
 
-.login-card {
-  background: white;
-  border-radius: 16px;
-  /* Soft, spread out shadow like the image */
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 
-              0 2px 4px -1px rgba(0, 0, 0, 0.06), 
-              0 20px 25px -5px rgba(0, 0, 0, 0.1);
-  padding: 48px 40px;
-  width: 100%;
-  max-width: 440px;
-  animation: slideUp 0.5s ease-out;
-}
-
-@keyframes slideUp {
-  from { opacity: 0; transform: translateY(20px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-
-/* --- Logo --- */
-.logo {
+/* --- Branding (Logo) --- */
+.brand-header {
   display: flex;
-  justify-content: center;
+  align-items: center;
+  gap: 10px;
   margin-bottom: 24px;
 }
 
 .logo-icon {
-  width: 56px;
-  height: 56px;
-  background: #f97316; /* Solid orange or subtle gradient */
-  background: linear-gradient(135deg, #fb923c 0%, #ea580c 100%);
-  border-radius: 12px;
+  width: 40px;
+  height: 40px;
+  background-color: #2563eb; /* Blue */
+  color: white;
+  border-radius: 8px;
   display: flex;
   align-items: center;
   justify-content: center;
-  color: white;
-  font-size: 28px;
-  font-weight: 800;
-  box-shadow: 0 4px 10px rgba(234, 88, 12, 0.2);
 }
 
-/* --- Header --- */
-.title {
+.logo-icon svg {
+  width: 24px;
+  height: 24px;
+}
+
+.brand-name {
   font-size: 24px;
   font-weight: 700;
-  color: #111827; /* Darker black/gray */
-  text-align: center;
+  color: #111827;
+}
+
+/* --- Card --- */
+.login-card {
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 
+              0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  padding: 40px;
+  width: 100%;
+  max-width: 480px;
+}
+
+/* --- Typography --- */
+.title {
+  font-size: 24px;
+  font-weight: 600;
+  color: #111827;
   margin: 0 0 8px 0;
 }
 
 .subtitle {
   font-size: 15px;
   color: #6b7280;
-  text-align: center;
   margin: 0 0 32px 0;
+  line-height: 1.5;
 }
 
 /* --- Form --- */
@@ -82,84 +85,51 @@
 .form-group {
   display: flex;
   flex-direction: column;
+  gap: 8px;
 }
 
 .form-group label {
   font-size: 14px;
-  font-weight: 500;
-  color: #374151;
-  margin-bottom: 6px;
+  font-weight: 600;
+  color: #111827;
 }
 
-/* Matches the "Forgot?" link alignment */
-.password-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 6px;
-}
-
-.password-header label {
-  margin-bottom: 0;
-}
-
-.forgot-link {
-  font-size: 13px;
-  color: #f97316;
-  text-decoration: none;
-  font-weight: 500;
-}
-
-.forgot-link:hover {
-  text-decoration: underline;
-}
-
-/* Input Styling - The key to the look */
 .form-group input {
   padding: 12px 16px;
-  font-size: 15px;
-  /* Light gray background like the screenshot */
-  background-color: #f9fafb; 
-  border: 1px solid #e5e7eb;
-  border-radius: 8px;
-  transition: all 0.2s ease;
+  font-size: 14px;
+  background-color: #ffffff; 
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
   color: #1f2937;
+  width: 100%;
 }
 
 .form-group input::placeholder {
   color: #9ca3af;
 }
 
-/* The orange focus ring seen in the screenshot */
 .form-group input:focus {
   outline: none;
-  background-color: #ffffff;
-  border-color: #f97316;
-  box-shadow: 0 0 0 4px rgba(249, 115, 22, 0.1);
+  border-color: #2563eb; /* Blue border title */
+  box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.1);
 }
 
 /* --- Buttons --- */
 .btn-primary {
+  margin-top: 8px;
   padding: 12px;
-  /* Orange Gradient */
-  background: linear-gradient(to right, #fb923c, #ea580c);
+  background-color: #2563eb; /* Blue Button */
   color: white;
   border: none;
-  border-radius: 8px;
-  font-size: 15px;
+  border-radius: 6px;
+  font-size: 14px;
   font-weight: 600;
   cursor: pointer;
-  transition: transform 0.1s, box-shadow 0.2s;
-  margin-top: 8px;
+  transition: background-color 0.2s;
 }
 
 .btn-primary:hover:not(:disabled) {
-  box-shadow: 0 4px 12px rgba(234, 88, 12, 0.3);
-  transform: translateY(-1px);
-}
-
-.btn-primary:active {
-  transform: translateY(0);
+  background-color: #1d4ed8;
 }
 
 .btn-primary:disabled {
@@ -167,79 +137,77 @@
   cursor: not-allowed;
 }
 
-/* --- Divider --- */
-.divider {
-  position: relative;
-  text-align: center;
-  margin: 24px 0;
-}
-
-.divider::before {
-  content: '';
-  position: absolute;
-  top: 50%;
-  left: 0;
-  right: 0;
-  height: 1px;
-  background: #e5e7eb;
-}
-
-.divider span {
-  position: relative;
-  background: white;
-  padding: 0 12px;
-  font-size: 12px;
-  color: #9ca3af;
-  font-weight: 500;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-}
-
-/* --- Social Buttons --- */
-.social-buttons {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 16px;
-}
-
-.btn-social {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 10px;
-  padding: 10px;
-  background: white;
-  border: 1px solid #e5e7eb;
-  border-radius: 8px;
+/* --- Messages --- */
+.error-message {
+  color: #dc2626;
   font-size: 14px;
-  font-weight: 500;
-  color: #374151;
-  cursor: pointer;
-  transition: background-color 0.2s;
+  padding: 10px;
+  background-color: #fee2e2;
+  border-radius: 6px;
 }
 
-.btn-social:hover {
-  background-color: #f9fafb;
-  border-color: #d1d5db;
+.success-message {
+  color: #16a34a;
+  font-size: 14px;
+  padding: 10px;
+  background-color: #dcfce7;
+  border-radius: 6px;
 }
 
-.btn-social img, .btn-social svg {
-  width: 20px;
-  height: 20px;
+/* --- Footer Area --- */
+.signup-footer {
+  margin-top: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
 }
 
-/* --- Footer --- */
+.separator {
+  height: 1px;
+  background-color: #e5e7eb;
+  width: 100%;
+}
+
 .signup-text {
   text-align: center;
   font-size: 14px;
   color: #6b7280;
-  margin-top: 24px;
+  margin: 0;
 }
 
 .signup-link {
-  color: #ea580c;
+  color: #2563eb;
   text-decoration: none;
-  font-weight: 600;
+  font-weight: 500;
 }
 
-.signup-link:
+.signup-link:hover {
+  text-decoration: underline;
+}
+
+/* --- Demo Credentials --- */
+.demo-credentials {
+  margin-top: 8px;
+}
+
+.demo-label {
+  font-size: 14px;
+  color: #6b7280;
+  margin-bottom: 8px;
+}
+
+.demo-box {
+  background-color: #f9fafb;
+  border-radius: 6px;
+  padding: 16px;
+  font-size: 13px;
+  color: #374151;
+}
+
+.demo-box p {
+  margin: 4px 0;
+}
+
+.demo-box strong {
+  font-weight: 600;
+}
