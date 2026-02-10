@@ -1,0 +1,83 @@
+<div class="home-container">
+  <!-- Header Navigation -->
+  <header class="header">
+    <div class="header-content">
+      <div class="logo-section">
+        <div class="logo-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+            <path fill-rule="evenodd" d="M7.5 6v.75H5.513c-.96 0-1.764.724-1.865 1.679l-1.263 12A1.875 1.875 0 0 0 4.25 22.5h15.5a1.875 1.875 0 0 0 1.865-2.071l-1.263-12a1.875 1.875 0 0 0-1.865-1.679H16.5V6a4.5 4.5 0 1 0-9 0ZM12 3a3 3 0 0 0-3 3v.75h6V6a3 3 0 0 0-3-3Zm-3 8.25a3 3 0 1 0 6 0v-.75a.75.75 0 0 1 1.5 0v.75a4.5 4.5 0 1 1-9 0v-.75a.75.75 0 0 1 1.5 0v.75Z" clip-rule="evenodd" />
+          </svg>
+        </div>
+        <span class="brand-name">JobFinder</span>
+      </div>
+      <nav class="nav-buttons">
+        <button class="btn-secondary" (click)="navigateToLogin()">Sign In</button>
+        <button class="btn-primary" (click)="navigateToRegister()">Get Started</button>
+      </nav>
+    </div>
+  </header>  <!-- Hero Section -->
+  <section class="hero-section">
+    <h1 class="hero-title">Find Your <span class="highlight">Dream Job</span></h1>
+    <p class="hero-subtitle">
+      Search millions of job opportunities from top companies around the world.<br>
+      Save your favorites, track applications, and land your next great role.
+    </p>
+    
+    <!-- Search Bar -->
+    <div class="search-container">
+      <div class="search-box">
+        <svg class="search-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="11" cy="11" r="8"></circle>
+          <path d="m21 21-4.35-4.35"></path>
+        </svg>
+        <input 
+          type="text" 
+          class="search-input" 
+          placeholder="Search by job title, company, or keywords..."
+          [(ngModel)]="searchQuery"
+          (input)="onSearch()"
+        />
+        <button class="search-button">Search Jobs</button>
+      </div>
+    </div>
+  </section>
+  <!-- Jobs Section -->
+  <section class="jobs-section">
+    <div class="section-header">
+      <h2 class="section-title">Latest Job Opportunities</h2>
+      <p class="section-subtitle">Explore thousands of jobs from companies hiring now</p>
+    </div>
+
+    <div class="jobs-list">
+      <div class="job-item" *ngFor="let job of jobs" (click)="viewJobDetails(job.id)">
+        <div class="job-item-left">
+          <div class="company-logo">{{ job.logo }}</div>
+          <div class="job-info">
+            <h3 class="job-title">{{ job.title }}</h3>
+            <div class="job-company">
+              <span class="company-name">{{ job.company }}</span>
+              <span class="separator">•</span>
+              <span class="job-location">📍 {{ job.location }}</span>
+            </div>
+            <p class="job-description">{{ job.description }}</p>
+            <div class="job-tags">
+              <span class="tag" *ngFor="let tag of job.tags">{{ tag }}</span>
+            </div>
+          </div>
+        </div>
+        
+        <div class="job-item-right">
+          <span class="job-type">{{ job.type }}</span>
+          <span class="job-salary">{{ job.salary }}</span>
+          <span class="job-posted">{{ job.postedDate }}</span>
+          <button class="btn-apply">Apply Now</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <p>&copy; 2026 JobFinder. Find your dream job today.</p>
+  </footer>
+</div>

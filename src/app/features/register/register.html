@@ -1,43 +1,52 @@
-    <div class="register-container">
-    <div class="register-card">
-        <!-- Logo -->
-        <div class="logo">
-        <div class="logo-icon">B</div>
+<div class="register-container">
+    
+    <!-- Logo Section -->
+    <div class="brand-header">
+        <div class="logo-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                <path fill-rule="evenodd" d="M7.5 6v.75H5.513c-.96 0-1.764.724-1.865 1.679l-1.263 12A1.875 1.875 0 0 0 4.25 22.5h15.5a1.875 1.875 0 0 0 1.865-2.071l-1.263-12a1.875 1.875 0 0 0-1.865-1.679H16.5V6a4.5 4.5 0 1 0-9 0ZM12 3a3 3 0 0 0-3 3v.75h6V6a3 3 0 0 0-3-3Zm-3 8.25a3 3 0 1 0 6 0v-.75a.75.75 0 0 1 1.5 0v.75a4.5 4.5 0 1 1-9 0v-.75a.75.75 0 0 1 1.5 0v.75Z" clip-rule="evenodd" />
+            </svg>        
         </div>
+        <span class="brand-name">JobFinder</span>
+    </div>
 
+    <div class="register-card">
         <!-- Header -->
         <h1 class="title">Create Account</h1>
-        <p class="subtitle">Join Brecoulage and start your journey</p>
+        <p class="subtitle">Sign up to start searching for your dream job</p>
 
         <!-- Form -->
         <form (ngSubmit)="onSubmit()" #registerForm="ngForm" class="register-form">
-        <!-- Full Name -->
-        <div class="form-group">
-            <label for="firstName">first Name</label>
-            <input 
-            type="text" 
-            id="firstName" 
-            name="firstName"
-            [(ngModel)]="registerData.firstName" 
-            (input)="onInputChange()"
-            placeholder="John"
-            required
-            [disabled]="isLoading"
-            />
-        </div>
+        
+        <!-- Names Row -->
+        <div class="form-row">
+            <div class="form-group half-width">
+                <label for="firstName">First Name</label>
+                <input 
+                type="text" 
+                id="firstName" 
+                name="firstName"
+                [(ngModel)]="registerData.firstName" 
+                (input)="onInputChange()"
+                placeholder="John"
+                required
+                [disabled]="isLoading"
+                />
+            </div>
 
-        <div class="form-group">
-            <label for="lastName">Last Name</label>
-            <input 
-            type="text" 
-            id="lastName" 
-            name="lastName"
-            [(ngModel)]="registerData.lastName" 
-            (input)="onInputChange()"
-            placeholder="Doe"
-            required
-            [disabled]="isLoading"
-            />
+            <div class="form-group half-width">
+                <label for="lastName">Last Name</label>
+                <input 
+                type="text" 
+                id="lastName" 
+                name="lastName"
+                [(ngModel)]="registerData.lastName" 
+                (input)="onInputChange()"
+                placeholder="Doe"
+                required
+                [disabled]="isLoading"
+                />
+            </div>
         </div>
 
         <!-- Email Address -->
@@ -49,7 +58,7 @@
             name="email"
             [(ngModel)]="registerData.email" 
             (input)="onInputChange()"
-            placeholder="you@example.com"
+            placeholder="your@email.com"
             required
             [disabled]="isLoading"
             />
@@ -68,7 +77,6 @@
             required
             [disabled]="isLoading"
             />
-            <small class="password-hint">At least 8 characters with numbers and symbols</small>
         </div>
 
         <!-- Confirm Password -->
@@ -101,25 +109,9 @@
         <button type="submit" class="btn-primary" [disabled]="isLoading || !registerForm.valid">
             {{ isLoading ? 'Creating Account...' : 'Create Account' }}
         </button>
-
+        
         <!-- Divider -->
-        <div class="divider">
-            <span>OR SIGN UP WITH</span>
-        </div>
-
-        <!-- Social Login -->
-        <div class="social-buttons">
-            <button type="button" class="btn-social">
-            <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google">
-            Google
-            </button>
-            <button type="button" class="btn-social">
-            <svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor">
-                <path d="M20 10c0-5.523-4.477-10-10-10S0 4.477 0 10c0 4.991 3.657 9.128 8.438 9.878v-6.987h-2.54V10h2.54V7.797c0-2.506 1.492-3.89 3.777-3.89 1.094 0 2.238.195 2.238.195v2.46h-1.26c-1.243 0-1.63.771-1.63 1.562V10h2.773l-.443 2.89h-2.33v6.988C16.343 19.128 20 14.991 20 10z"/>
-            </svg>
-            Facebook
-            </button>
-        </div>
+        <div class="divider"></div>
 
         <!-- Login Link -->
         <p class="login-text">
@@ -127,4 +119,4 @@
         </p>
         </form>
     </div>
-    </div>
+</div>

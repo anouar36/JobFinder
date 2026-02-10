@@ -1,1 +1,106 @@
-<p>dashboard works!</p>
+<div class="dashboard-container">
+  <!-- Header -->
+  <header class="dashboard-header">
+    <div class="logo-area">
+      <img src="logo.svg" alt="JobFinder Logo" class="logo">
+      <span class="logo-text">JobFinder</span>
+    </div>
+    <div class="user-profile">
+      <div class="user-info">
+        <span class="user-name">{{ user.firstName }}</span>
+        <span class="user-title">{{ user.lastName }}</span>
+      </div>
+      <img [src]="user.avatar" alt="Profile" class="avatar">
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main class="dashboard-content">
+    
+    <!-- Welcome Section -->
+    <div class="welcome-section">
+      <h1>Welcome back, {{ user.firstName }}!</h1>  
+      <p>Here are the latest job opportunities matching your profile.</p>
+    </div>
+
+    <!-- Navigation Tabs -->
+    <div class="tabs-nav">
+      <button 
+        class="tab-btn" 
+        [class.active]="activeTab === 'search-jobs'"
+        (click)="setActiveTab('search-jobs')">
+        Search Jobs
+      </button>
+      <button 
+        class="tab-btn" 
+        [class.active]="activeTab === 'favorites'"
+        (click)="setActiveTab('favorites')">
+        Favorites
+      </button>
+      <button 
+        class="tab-btn" 
+        [class.active]="activeTab === 'applications'"
+        (click)="setActiveTab('applications')">
+        Applications
+      </button>
+    </div>
+
+    <div class="tab-content" *ngIf="activeTab === 'search-jobs'">
+      <!-- Search Form -->
+      <div class="search-section">
+        <div class="search-form">
+          <div class="input-group">
+            <label>What</label>
+            <input type="text" [(ngModel)]="searchQuery" placeholder="Job title or keyword">
+            <i class="icon-search"></i>
+          </div>
+          <div class="input-group">
+            <label>Where</label>
+            <input type="text" [(ngModel)]="locationQuery" placeholder="City, state or zip">
+            <i class="icon-location"></i>
+          </div>
+          <button class="btn-search" (click)="onSearch()">Find Jobs</button>
+        </div>
+      </div>
+
+      <!-- Recent Openings -->
+      <div class="jobs-section">
+        <div class="section-header">
+          <h2>Recent Job Openings</h2>
+          <span class="job-count">{{ jobs.length }} Jobs found</span>
+        </div>
+
+        <div class="jobs-list">
+          <div class="job-card" *ngFor="let job of jobs">
+            <div class="job-header">
+              <div class="company-logo-placeholder">{{ job.logo }}</div>
+              <div class="job-main-info">
+                <h3>{{ job.title }}</h3>
+                <span class="company-name">{{ job.company }}</span>
+              </div>
+              <div class="job-posted">{{ job.posted }}</div>
+            </div>
+            
+            <div class="job-details">
+              <span class="badge location"><i class="fas fa-map-marker-alt"></i> {{ job.location }}</span>
+              <span class="badge type"><i class="fas fa-briefcase"></i> {{ job.type }}</span>
+              <span class="badge salary"><i class="fas fa-dollar-sign"></i> {{ job.salary }}</span>
+            </div>
+
+            <p class="job-description">{{ job.description }}</p>
+
+            <div class="job-actions">
+              <button class="btn-secondary">View Job</button>
+              <button class="btn-primary">Track Application</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="tab-content-placeholder" *ngIf="activeTab !== 'search-jobs'">
+      <p>Content for {{ activeTab }} coming soon...</p>
+    </div>
+
+  </main>
+</div>
