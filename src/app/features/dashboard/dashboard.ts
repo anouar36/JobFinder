@@ -1,21 +1,14 @@
-import { Component } from '@angular/core';
+import { Component, OnInit,ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { routes } from '../../app.routes';
 import { RouterModule } from '@angular/router';
 import { Router } from '@angular/router';
+import { Jops } from '../../core/services/jops';
+import { JobsApiResponse,Job } from '../../core/models/models';
+import {  SafeHtmlPipe  } from '../../core/pipes/safe-html.pipe.ts-pipe';
 
-interface Job {
-  id: number;
-  title: string;
-  company: string;
-  location: string;
-  type: string;
-  salary: string;
-  description: string;
-  logo: string;
-  posted: string;
-}
+
 
 interface User {
   id: number;
@@ -29,14 +22,16 @@ interface User {
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule,SafeHtmlPipe],
   templateUrl: './dashboard.html',
   styleUrl: './dashboard.css',
 })
-export class Dashboard {
+export class Dashboard implements OnInit {
 
-  private userLogining = localStorage.getItem('userLogining') ? JSON.parse(localStorage.getItem('userLogining')!) : null; 
-  
+  userLogining = localStorage.getItem('userLogining') ? JSON.parse(localStorage.getItem('userLogining')!) : null;
+
+  jobs: Job[] = [];
+
   user: User = {
     id:  this.userLogining.id,
     name: this.userLogining.name,
@@ -47,51 +42,45 @@ export class Dashboard {
   };
 
   activeTab: string = 'search-jobs';
+  isLoading: boolean = true;
 
-  constructor(private router: Router){}
+  constructor(
+    private router: Router,
+     private jobsService: Jops,
+     private cdr: ChangeDetectorRef
+    ){}
 
- 
-  
   searchQuery: string = '';
   locationQuery: string = '';
 
-  
+  ngOnInit () {
+    this.jobsService.getAllJobs().subscribe({
+      next: (response: JobsApiResponse) => {
+        console.log(' all jobs ', response.results);
 
-  jobs: Job[] = [
-    {
-      id: 1,
-      title: 'Senior Product Designer',
-      company: 'TechFlow',
-      location: 'San Francisco, CA',
-      type: 'Full Time',
-      salary: '$120k - $160k',
-      description: 'We are looking for an experienced Product Designer to lead our design team and help shape the future of our products.',
-      logo: 'TF',
-      posted: '2 days ago'
-    },
-    {
-      id: 2,
-      title: 'Frontend Developer',
-      company: 'Creative Studio',
-      location: 'Remote',
-      type: 'Contract',
-      salary: '$80k - $110k',
-      description: 'Join our creative team to build stunning web experiences for our clients using modern frontend technologies.',
-      logo: 'CS',
-      posted: '5 hrs ago'
-    },
-    {
-      id: 3,
-      title: 'UX Researcher',
-      company: 'Global Systems',
-      location: 'New York, NY',
-      type: 'Full Time',
-      salary: '$110k - $140k',
-      description: 'Help us understand our users better through qualitative and quantitative research methods.',
-      logo: 'GS',
-      posted: '1 day ago'
-    }
-  ];
+        const favorites = JSON.parse(localStorage.getItem('favoriteJobs') || '[]');
+        this.jobs = response.results.map(job => ({
+          ...job,
+          isLiked: favorites.some((fav: Job) => fav.id === job.id)
+        }));
+        this.isLoading = false; // Stop loading
+        this.cdr.detectChanges(); // Force update
+      },  
+      error: (err) => {
+        console.error('Error fetching jobs:', err);
+        this.isLoading = false;
+        this.cdr.detectChanges();
+      }
+    });
+
+  }
+
+  loadJobs() {
+    this.jobs = this.jobs.map(job => ({
+      ...job,
+      isLiked: false
+    }));
+  }
 
   setActiveTab(tab: string) {
     this.activeTab = tab;
@@ -99,6 +88,52 @@ export class Dashboard {
 
   onSearch() {
     console.log('Searching for:', this.searchQuery, 'in', this.locationQuery);
-    // In a real app, this would filter the jobs or make an API call
   }
+
+  viewJobDetails(job: Job) {
+    if (job.refs?.landing_page) {
+      window.open(job.refs.landing_page, '_blank');
+    } else {
+      console.log('Viewing details for job:', job.name);
+      alert(`Job Details:\n\nTitle: ${job.name}\nCompany: ${job.company?.name}\nLocation: ${job.locations?.[0]?.name || 'N/A'}\n\nClick "Apply Now" to visit the job application page.`);
+    }
+  }
+
+  applyToJob(job: Job) {
+    if (job.refs?.landing_page) {
+      window.open(job.refs.landing_page, '_blank');
+      console.log('Applying to job:', job.name);
+    } else {
+      alert('Application link is not available for this job.');
+    }
+  }
+
+  toggleLike(job: Job) {
+    job.isLiked = !job.isLiked;
+    
+    if (job.isLiked) {
+      console.log('Job saved to favorites:', job.name);
+      this.saveFavoriteJob(job);
+    } else {
+      console.log('Job removed from favorites:', job.name);
+      this.removeFavoriteJob(job);
+    }
+  }
+
+  saveFavoriteJob(job: Job) {
+    const favorites = JSON.parse(localStorage.getItem('favoriteJobs') || '[]');
+    const jobExists = favorites.find((fav: Job) => fav.id === job.id);
+    
+    if (!jobExists) {
+      favorites.push(job);
+      localStorage.setItem('favoriteJobs', JSON.stringify(favorites));
+    }
+  }
+
+  removeFavoriteJob(job: Job) {
+    const favorites = JSON.parse(localStorage.getItem('favoriteJobs') || '[]');
+    const updatedFavorites = favorites.filter((fav: Job) => fav.id !== job.id);
+    localStorage.setItem('favoriteJobs', JSON.stringify(updatedFavorites));
+  }
+
 }

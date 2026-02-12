@@ -1,8 +1,7 @@
 <div class="dashboard-container">
-  <!-- Header -->
   <header class="dashboard-header">
     <div class="logo-area">
-      <img src="logo.svg" alt="JobFinder Logo" class="logo">
+      <img src="suitcase.png" alt="JobFinder Logo" class="logo">
       <span class="logo-text">JobFinder</span>
     </div>
     <div class="user-profile">
@@ -14,16 +13,13 @@
     </div>
   </header>
 
-  <!-- Main Content -->
   <main class="dashboard-content">
     
-    <!-- Welcome Section -->
     <div class="welcome-section">
       <h1>Welcome back, {{ user.firstName }}!</h1>  
       <p>Here are the latest job opportunities matching your profile.</p>
     </div>
 
-    <!-- Navigation Tabs -->
     <div class="tabs-nav">
       <button 
         class="tab-btn" 
@@ -46,61 +42,63 @@
     </div>
 
     <div class="tab-content" *ngIf="activeTab === 'search-jobs'">
-      <!-- Search Form -->
       <div class="search-section">
         <div class="search-form">
           <div class="input-group">
             <label>What</label>
             <input type="text" [(ngModel)]="searchQuery" placeholder="Job title or keyword">
-            <i class="icon-search"></i>
           </div>
           <div class="input-group">
             <label>Where</label>
             <input type="text" [(ngModel)]="locationQuery" placeholder="City, state or zip">
-            <i class="icon-location"></i>
           </div>
           <button class="btn-search" (click)="onSearch()">Find Jobs</button>
         </div>
       </div>
 
-      <!-- Recent Openings -->
-      <div class="jobs-section">
-        <div class="section-header">
-          <h2>Recent Job Openings</h2>
-          <span class="job-count">{{ jobs.length }} Jobs found</span>
-        </div>
-
-        <div class="jobs-list">
-          <div class="job-card" *ngFor="let job of jobs">
-            <div class="job-header">
-              <div class="company-logo-placeholder">{{ job.logo }}</div>
-              <div class="job-main-info">
-                <h3>{{ job.title }}</h3>
-                <span class="company-name">{{ job.company }}</span>
-              </div>
-              <div class="job-posted">{{ job.posted }}</div>
+      <div class="jobs-container">
+        <div class="job-card" *ngFor="let job of jobs">
+          
+          <div class="card-header">
+            <div class="title-wrapper">
+              <h2 class="job-title">{{ job.name }}</h2>
+              <span class="job-date">{{ job.publication_date | date:'mediumDate' }}</span>
             </div>
-            
-            <div class="job-details">
-              <span class="badge location"><i class="fas fa-map-marker-alt"></i> {{ job.location }}</span>
-              <span class="badge type"><i class="fas fa-briefcase"></i> {{ job.type }}</span>
-              <span class="badge salary"><i class="fas fa-dollar-sign"></i> {{ job.salary }}</span>
-            </div>
+            <h3 class="company-name">{{ job.company?.name }}</h3>
+          </div>
 
-            <p class="job-description">{{ job.description }}</p>
+          <div class="card-badges">
+            <span class="badge" *ngIf="job.locations?.length">
+              📍 {{ job.locations[0].name }}
+            </span>
+            <span class="badge level" *ngIf="job.levels?.length">
+              🎯 {{ job.levels[0].name }}
+            </span>
+            <span class="badge category" *ngIf="job.categories?.length">
+              📂 {{ job.categories[0].name }}
+            </span>
+          </div>
 
-            <div class="job-actions">
-              <button class="btn-secondary">View Job</button>
-              <button class="btn-primary">Track Application</button>
+          <div class="card-body">
+            <div class="job-excerpt" [innerHTML]="(job.contents | slice:0:150) + '...'"></div>
+          </div>
+
+          <div class="card-footer">
+            <button class="btn-like" title="Save Job" (click)="job.isLiked = !job.isLiked" [class.liked]="job.isLiked">
+              <svg viewBox="0 0 24 24" class="heart-icon">
+                <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+              </svg>
+            </button>
+
+            <div class="action-buttons">
+              <button class="btn-secondary">View Details</button>
+              <button class="btn-primary">Apply Now</button>
             </div>
           </div>
+
         </div>
       </div>
-    </div>
-    
-    <div class="tab-content-placeholder" *ngIf="activeTab !== 'search-jobs'">
-      <p>Content for {{ activeTab }} coming soon...</p>
-    </div>
 
+    </div>
   </main>
 </div>
