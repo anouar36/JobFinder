@@ -26,7 +26,7 @@
     <!-- Search Bar -->
     <div class="search-container">
       <div class="search-box">
-        <svg class="search-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <svg class="search-icon" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
           <circle cx="11" cy="11" r="8"></circle>
           <path d="m21 21-4.35-4.35"></path>
         </svg>
@@ -48,32 +48,48 @@
       <p class="section-subtitle">Explore thousands of jobs from companies hiring now</p>
     </div>
 
-    <div class="jobs-list">
-      <div class="job-item" *ngFor="let job of jobs" (click)="viewJobDetails(job.id)">
-        <div class="job-item-left">
-          <div class="company-logo">{{ job.logo }}</div>
-          <div class="job-info">
-            <h3 class="job-title">{{ job.title }}</h3>
-            <div class="job-company">
-              <span class="company-name">{{ job.company }}</span>
-              <span class="separator">•</span>
-              <span class="job-location">📍 {{ job.location }}</span>
+     <div class="jobs-container">
+        <div class="job-card" *ngFor="let job of allJobs">
+          
+          <div class="card-header">
+            <div class="title-wrapper">
+              <h2 class="job-title">{{ job.name }}</h2>
+              <span class="job-date">{{ job.publication_date | date:'mediumDate' }}</span>
             </div>
-            <p class="job-description">{{ job.description }}</p>
-            <div class="job-tags">
-              <span class="tag" *ngFor="let tag of job.tags">{{ tag }}</span>
+            <h3 class="company-name">{{ job.company?.name }}</h3>
+          </div>
+
+          <div class="card-badges">
+            <span class="badge" *ngIf="job.locations?.length">
+              📍 {{ job.locations[0].name }}
+            </span>
+            <span class="badge level" *ngIf="job.levels?.length">
+              🎯 {{ job.levels[0].name }}
+            </span>
+            <span class="badge category" *ngIf="job.categories?.length">
+              📂 {{ job.categories[0].name }}
+            </span>
+          </div>
+
+          <div class="card-body">
+            <div class="job-excerpt" [innerHTML]="(job.contents | slice:0:150) + '...'"></div>
+          </div>
+
+          <div class="card-footer">
+            <button class="btn-like" title="Save Job" (click)="job.isLiked = !job.isLiked" [class.liked]="job.isLiked">
+              <svg viewBox="0 0 24 24" class="heart-icon">
+                <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+              </svg>
+            </button>
+
+            <div class="action-buttons">
+              <button class="btn-secondary">View Details</button>
+              <button class="btn-primary">Apply Now</button>
             </div>
           </div>
-        </div>
-        
-        <div class="job-item-right">
-          <span class="job-type">{{ job.type }}</span>
-          <span class="job-salary">{{ job.salary }}</span>
-          <span class="job-posted">{{ job.postedDate }}</span>
-          <button class="btn-apply">Apply Now</button>
+
         </div>
       </div>
-    </div>
   </section>
 
   <!-- Footer -->

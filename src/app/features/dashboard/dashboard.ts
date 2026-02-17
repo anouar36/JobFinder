@@ -63,8 +63,8 @@ export class Dashboard implements OnInit {
           ...job,
           isLiked: favorites.some((fav: Job) => fav.id === job.id)
         }));
-        this.isLoading = false; // Stop loading
-        this.cdr.detectChanges(); // Force update
+        this.isLoading = false; 
+        this.cdr.detectChanges(); 
       },  
       error: (err) => {
         console.error('Error fetching jobs:', err);

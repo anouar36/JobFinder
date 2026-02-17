@@ -1,11 +1,14 @@
-
-/* Container */
+/* ==================================================
+   GLOBAL CONTAINER
+================================================== */
 .home-container {
   min-height: 100vh;
   background: linear-gradient(to bottom, #f9fafb 0%, #ffffff 100%);
 }
 
-/* Header */
+/* ==================================================
+   HEADER
+================================================== */
 .header {
   background: white;
   border-bottom: 1px solid #e5e7eb;
@@ -13,7 +16,7 @@
   position: sticky;
   top: 0;
   z-index: 100;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
 }
 
 .header-content {
@@ -42,11 +45,6 @@
   justify-content: center;
 }
 
-.logo-icon svg {
-  width: 24px;
-  height: 24px;
-}
-
 .brand-name {
   font-size: 24px;
   font-weight: 700;
@@ -58,7 +56,9 @@
   gap: 12px;
 }
 
-/* Hero Section */
+/* ==================================================
+   HERO SECTION
+================================================== */
 .hero-section {
   max-width: 1280px;
   margin: 0 auto;
@@ -74,9 +74,7 @@
   line-height: 1.1;
 }
 
-.highlight {
-  color: #2563eb;
-}
+.highlight { color: #2563eb; }
 
 .hero-subtitle {
   font-size: 20px;
@@ -85,11 +83,8 @@
   line-height: 1.6;
 }
 
-/* Search Container */
-.search-container {
-  max-width: 900px;
-  margin: 0 auto;
-}
+/* SEARCH */
+.search-container { max-width: 900px; margin: 0 auto; }
 
 .search-box {
   display: flex;
@@ -98,21 +93,13 @@
   border: 2px solid #e5e7eb;
   border-radius: 12px;
   padding: 8px 8px 8px 16px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
-  transition: all 0.3s ease;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+  transition: 0.3s;
 }
 
 .search-box:focus-within {
   border-color: #2563eb;
-  box-shadow: 0 8px 16px rgba(37, 99, 235, 0.1);
-}
-
-.search-icon {
-  width: 20px;
-  height: 20px;
-  color: #9ca3af;
-  margin-right: 12px;
-  flex-shrink: 0;
+  box-shadow: 0 8px 16px rgba(37,99,235,0.1);
 }
 
 .search-input {
@@ -120,13 +107,7 @@
   border: none;
   outline: none;
   font-size: 16px;
-  color: #111827;
-  padding: 12px 8px;
-  background: transparent;
-}
-
-.search-input::placeholder {
-  color: #9ca3af;
+  padding: 12px;
 }
 
 .search-button {
@@ -135,263 +116,122 @@
   border: none;
   padding: 12px 24px;
   border-radius: 8px;
-  font-size: 15px;
   font-weight: 600;
   cursor: pointer;
-  transition: all 0.2s;
-  flex-shrink: 0;
-  white-space: nowrap;
 }
 
-.search-button:hover {
-  background-color: #1d4ed8;
-  transform: scale(1.02);
-}
+.search-button:hover { background-color: #1d4ed8; }
 
-/* Jobs Section */
+/* ==================================================
+   JOBS SECTION (UPDATED)
+================================================== */
 .jobs-section {
   max-width: 1280px;
   margin: 0 auto;
   padding: 40px 24px 60px;
 }
 
-.section-header {
-  text-align: center;
-  margin-bottom: 32px;
+.section-header { text-align: center; margin-bottom: 32px; }
+.section-title { font-size: 36px; font-weight: 700; color: #111827; }
+.section-subtitle { font-size: 18px; color: #6b7280; }
+
+.jobs-container {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
 }
 
-.section-title {
-  font-size: 36px;
-  font-weight: 700;
-  color: #111827;
-  margin-bottom: 12px;
-}
-
-.section-subtitle {
-  font-size: 18px;
-  color: #6b7280;
-}
-
-/* Jobs List */
-.jobs-list {
+.job-card {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 14px;
+  padding: 1.6rem;
+  box-shadow: 0 3px 10px rgba(0,0,0,0.04);
+  transition: 0.25s;
   display: flex;
   flex-direction: column;
   gap: 16px;
 }
 
-/* Job Item */
-.job-item {
-  background: white;
-  border-radius: 12px;
-  border: 1px solid #e5e7eb;
-  padding: 24px;
-  cursor: pointer;
-  transition: all 0.3s ease;
+.job-card:hover {
+  border-color: #bfdbfe;
+  box-shadow: 0 12px 30px rgba(26,115,232,0.12);
+  transform: translateY(-4px);
+}
+
+.card-header .title-wrapper {
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
-  gap: 24px;
+  gap: 10px;
 }
 
-.job-item:hover {
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-  border-color: #2563eb;
-  transform: translateX(4px);
-}
+.job-title { font-size: 1.35rem; font-weight: 700; color: #111827; }
+.company-name { font-size: 0.95rem; color: #64748b; }
+.job-date { font-size: 0.85rem; color: #94a3b8; }
 
-.job-item-left {
-  display: flex;
-  gap: 20px;
-  flex: 1;
-  align-items: flex-start;
-}
-
-.company-logo {
-  width: 56px;
-  height: 56px;
-  min-width: 56px;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  border-radius: 12px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 28px;
-}
-
-.job-info {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  flex: 1;
-}
-
-.job-title {
-  font-size: 20px;
-  font-weight: 700;
-  color: #111827;
-  margin: 0;
-}
-
-.job-company {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  flex-wrap: wrap;
-}
-
-.company-name {
-  font-size: 16px;
-  font-weight: 600;
-  color: #374151;
-}
-
-.separator {
-  color: #d1d5db;
-}
-
-.job-location {
-  font-size: 14px;
-  color: #6b7280;
-}
-
-.job-description {
-  font-size: 14px;
-  color: #6b7280;
-  line-height: 1.6;
-  margin: 0;
-}
-
-.job-tags {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-  margin-top: 4px;
-}
-
-.tag {
-  background: #f3f4f6;
-  color: #374151;
-  padding: 6px 12px;
-  border-radius: 8px;
-  font-size: 12px;
-  font-weight: 500;
-}
-
-.job-item-right {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-end;
-  gap: 12px;
-  min-width: 180px;
-}
-
-.job-type {
-  background: #dbeafe;
-  color: #1e40af;
-  padding: 6px 16px;
+.card-badges { display: flex; flex-wrap: wrap; gap: 8px; }
+.badge {
+  background: #f1f5f9;
+  color: #475569;
+  padding: 5px 12px;
   border-radius: 20px;
-  font-size: 13px;
-  font-weight: 600;
+  font-size: 0.8rem;
+}
+.badge.level { background: #e0f2fe; color: #0369a1; }
+.badge.category { background: #fdf4ff; color: #86198f; }
+
+.job-excerpt { color: #475569; font-size: 0.95rem; line-height: 1.6; }
+
+.card-footer {
+  margin-top: auto;
+  padding-top: 1.2rem;
+  border-top: 1px solid #f1f5f9;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
 }
 
-.job-salary {
-  font-size: 20px;
-  font-weight: 700;
-  color: #059669;
+.action-buttons { display: flex; gap: 10px; }
+
+.btn-like {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 8px;
+  border-radius: 50%;
+  color: #94a3b8;
+  transition: 0.2s;
 }
 
-.job-posted {
-  font-size: 13px;
-  color: #9ca3af;
-}
+.btn-like:hover { background: #fff1f2; color: #e11d48; }
+.btn-like.liked { color: #e11d48; }
 
-/* Buttons */
 .btn-primary {
-  background-color: #2563eb;
+  background-color: #1a73e8;
   color: white;
   border: none;
-  padding: 10px 20px;
-  border-radius: 8px;
-  font-size: 14px;
-  font-weight: 600;
+  padding: 0.55rem 1.2rem;
+  border-radius: 7px;
+  font-size: 0.9rem;
   cursor: pointer;
-  transition: all 0.2s;
 }
-
-.btn-primary:hover {
-  background-color: #1d4ed8;
-  transform: scale(1.05);
-}
+.btn-primary:hover { background-color: #1557b0; }
 
 .btn-secondary {
-  background-color: transparent;
-  color: #374151;
-  border: 1px solid #d1d5db;
-  padding: 10px 20px;
-  border-radius: 8px;
-  font-size: 14px;
-  font-weight: 600;
+  background: white;
+  color: #1a73e8;
+  border: 1px solid #e0f2fe;
+  padding: 0.55rem 1.2rem;
+  border-radius: 7px;
   cursor: pointer;
-  transition: all 0.2s;
 }
+.btn-secondary:hover { background: #f0f9ff; }
 
-.btn-secondary:hover {
-  background-color: #f9fafb;
-  border-color: #9ca3af;
-}
-
-.btn-primary-large {
-  background-color: #2563eb;
-  color: white;
-  border: none;
-  padding: 16px 32px;
-  border-radius: 12px;
-  font-size: 16px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.2s;
-}
-
-.btn-primary-large:hover {
-  background-color: #1d4ed8;
-  transform: scale(1.05);
-}
-
-.btn-secondary-large {
-  background-color: white;
-  color: #374151;
-  border: 2px solid #d1d5db;
-  padding: 16px 32px;
-  border-radius: 12px;
-  font-size: 16px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.2s;
-}
-
-.btn-secondary-large:hover {
-  background-color: #f9fafb;
-  border-color: #9ca3af;
-}
-
-.btn-apply {
-  background-color: #2563eb;
-  color: white;
-  border: none;
-  padding: 8px 16px;
-  border-radius: 8px;
-  font-size: 14px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.2s;
-}
-
-.btn-apply:hover {
-  background-color: #1d4ed8;
-  transform: scale(1.05);
-}
-
-/* Footer */
+/* ==================================================
+   FOOTER
+================================================== */
 .footer {
   background: #111827;
   color: #9ca3af;
@@ -400,73 +240,21 @@
   margin-top: 60px;
 }
 
-.footer p {
-  margin: 0;
-  font-size: 14px;
+/* ==================================================
+   RESPONSIVE
+================================================== */
+@media (max-width: 768px) {
+  .hero-title { font-size: 36px; }
+  .card-header .title-wrapper { flex-direction: column; }
+  .card-footer { flex-direction: column; align-items: flex-start; }
+  .action-buttons { width: 100%; justify-content: space-between; }
 }
 
-/* Responsive */
-@media (max-width: 768px) {
-  .hero-section {
-    padding: 40px 24px 30px;
-  }
 
-  .hero-title {
-    font-size: 36px;
-  }
-
-  .hero-subtitle {
-    font-size: 16px;
-    margin-bottom: 24px;
-  }
-
-  .search-box {
-    flex-direction: column;
-    gap: 12px;
-    padding: 16px;
-  }
-
-  .search-input {
-    width: 100%;
-    padding: 12px;
-  }
-  .search-button {
-    width: 100%;
-    padding: 14px 24px;
-  }
-
-  .jobs-section {
-    padding: 30px 24px 40px;
-  }
-
-  .section-header {
-    margin-bottom: 24px;
-  }
-
-  .section-title {
-    font-size: 28px;
-  }
-
-  .job-item {
-    flex-direction: column;
-  }
-
-  .job-item-left {
-    flex-direction: column;
-  }
-
-  .job-item-right {
-    width: 100%;
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
-    flex-wrap: wrap;
-  }
-
-  .company-logo {
-    width: 48px;
-    height: 48px;
-    min-width: 48px;
-    font-size: 24px;
-  }
+.search-icon {
+  width: 20px;
+  height: 20px;
+  color: #9ca3af;
+  margin-right: 12px;
+  flex-shrink: 0;
 }
