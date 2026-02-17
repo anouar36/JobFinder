@@ -5,7 +5,11 @@
       <div class="logo-section">
         <div class="logo-icon">
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
-            <path fill-rule="evenodd" d="M7.5 6v.75H5.513c-.96 0-1.764.724-1.865 1.679l-1.263 12A1.875 1.875 0 0 0 4.25 22.5h15.5a1.875 1.875 0 0 0 1.865-2.071l-1.263-12a1.875 1.875 0 0 0-1.865-1.679H16.5V6a4.5 4.5 0 1 0-9 0ZM12 3a3 3 0 0 0-3 3v.75h6V6a3 3 0 0 0-3-3Zm-3 8.25a3 3 0 1 0 6 0v-.75a.75.75 0 0 1 1.5 0v.75a4.5 4.5 0 1 1-9 0v-.75a.75.75 0 0 1 1.5 0v.75Z" clip-rule="evenodd" />
+            <path
+              fill-rule="evenodd"
+              d="M7.5 6v.75H5.513c-.96 0-1.764.724-1.865 1.679l-1.263 12A1.875 1.875 0 0 0 4.25 22.5h15.5a1.875 1.875 0 0 0 1.865-2.071l-1.263-12a1.875 1.875 0 0 0-1.865-1.679H16.5V6a4.5 4.5 0 1 0-9 0ZM12 3a3 3 0 0 0-3 3v.75h6V6a3 3 0 0 0-3-3Zm-3 8.25a3 3 0 1 0 6 0v-.75a.75.75 0 0 1 1.5 0v.75a4.5 4.5 0 1 1-9 0v-.75a.75.75 0 0 1 1.5 0v.75Z"
+              clip-rule="evenodd"
+            />
           </svg>
         </div>
         <span class="brand-name">JobFinder</span>
@@ -15,24 +19,32 @@
         <button class="btn-primary" (click)="navigateToRegister()">Get Started</button>
       </nav>
     </div>
-  </header>  <!-- Hero Section -->
+  </header>
+  <!-- Hero Section -->
   <section class="hero-section">
     <h1 class="hero-title">Find Your <span class="highlight">Dream Job</span></h1>
     <p class="hero-subtitle">
-      Search millions of job opportunities from top companies around the world.<br>
+      Search millions of job opportunities from top companies around the world.<br />
       Save your favorites, track applications, and land your next great role.
     </p>
-    
+
     <!-- Search Bar -->
     <div class="search-container">
       <div class="search-box">
-        <svg class="search-icon" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <svg
+          class="search-icon"
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+        >
           <circle cx="11" cy="11" r="8"></circle>
           <path d="m21 21-4.35-4.35"></path>
         </svg>
-        <input 
-          type="text" 
-          class="search-input" 
+        <input
+          type="text"
+          class="search-input"
           placeholder="Search by job title, company, or keywords..."
           [(ngModel)]="searchQuery"
           (input)="onSearch()"
@@ -48,48 +60,62 @@
       <p class="section-subtitle">Explore thousands of jobs from companies hiring now</p>
     </div>
 
-     <div class="jobs-container">
-        <div class="job-card" *ngFor="let job of allJobs">
-          
-          <div class="card-header">
-            <div class="title-wrapper">
-              <h2 class="job-title">{{ job.name }}</h2>
-              <span class="job-date">{{ job.publication_date | date:'mediumDate' }}</span>
-            </div>
-            <h3 class="company-name">{{ job.company?.name }}</h3>
+    <div class="jobs-container">
+      <div class="job-card" *ngFor="let job of paginationJobs">
+        <div class="card-header">
+          <div class="title-wrapper">
+            <h2 class="job-title">{{ job.name }}</h2>
+            <span class="job-date">{{ job.publication_date | date : 'mediumDate' }}</span>
           </div>
+          <h3 class="company-name">{{ job.company?.name }}</h3>
+        </div>
 
-          <div class="card-badges">
-            <span class="badge" *ngIf="job.locations?.length">
-              📍 {{ job.locations[0].name }}
-            </span>
-            <span class="badge level" *ngIf="job.levels?.length">
-              🎯 {{ job.levels[0].name }}
-            </span>
-            <span class="badge category" *ngIf="job.categories?.length">
-              📂 {{ job.categories[0].name }}
-            </span>
+        <div class="card-badges">
+          <span class="badge" *ngIf="job.locations?.length"> 📍 {{ job.locations[0].name }} </span>
+          <span class="badge level" *ngIf="job.levels?.length"> 🎯 {{ job.levels[0].name }} </span>
+          <span class="badge category" *ngIf="job.categories?.length">
+            📂 {{ job.categories[0].name }}
+          </span>
+        </div>
+
+        <div class="card-body">
+          <div class="job-excerpt" [innerHTML]="(job.contents | slice : 0 : 150) + '...'"></div>
+        </div>
+
+        <div class="card-footer">
+          <button
+            class="btn-like"
+            title="Save Job"
+            (click)="job.isLiked = !job.isLiked"
+            [class.liked]="job.isLiked"
+          >
+            <svg viewBox="0 0 24 24" class="heart-icon">
+              <path
+                d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"
+              ></path>
+            </svg>
+          </button>
+
+          <div class="action-buttons">
+            <button class="btn-secondary">View Details</button>
+            <button class="btn-primary">Apply Now</button>
           </div>
-
-          <div class="card-body">
-            <div class="job-excerpt" [innerHTML]="(job.contents | slice:0:150) + '...'"></div>
-          </div>
-
-          <div class="card-footer">
-            <button class="btn-like" title="Save Job" (click)="job.isLiked = !job.isLiked" [class.liked]="job.isLiked">
-              <svg viewBox="0 0 24 24" class="heart-icon">
-                <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
-              </svg>
-            </button>
-
-            <div class="action-buttons">
-              <button class="btn-secondary">View Details</button>
-              <button class="btn-primary">Apply Now</button>
-            </div>
-          </div>
-
         </div>
       </div>
+
+      <!-- Pagination -->
+      <div class="pagination-container">
+        <button (click)="prevPage()" [disabled]="currentPage === 1" class="pagination-btn">
+          « Previous
+        </button>
+
+        <span class="pagination-info"> Page {{ currentPage }} of {{ totalPages }} </span>
+
+        <button (click)="nextPage()" [disabled]="currentPage === totalPages" class="pagination-btn">
+          Next »
+        </button>
+      </div>
+    </div>
   </section>
 
   <!-- Footer -->

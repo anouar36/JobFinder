@@ -20,6 +20,14 @@ export class Home implements OnInit {
   isLoading: boolean =true;
 
 
+  //pagination varibales 
+  paginationJobs: Job[]= [];
+  currentPage: number=1;
+  itemsPerPage: number =10;
+  totalPages: number = 0;
+
+
+
   constructor(
             private router: Router,
             private jobsService: Jops,
@@ -30,17 +38,10 @@ export class Home implements OnInit {
     this.jobsService.getAllJobs().subscribe({
       next:(response:JobsApiResponse)=>{
       console.log(' all jobs ', response.results);
+      this.allJobs = response.results;
+      this.totalPages = Math.ceil(response.results.length /  this.itemsPerPage);
+      this.updatePaginated();
 
-
-
-
-
-      const favorites = JSON.parse(localStorage.getItem('favoriteJobs') || '[]');
-
-      this.allJobs = response.results.map(job => ({
-        ...job,
-        isLiked: favorites.some((fav: Job) => fav.id === job.id)
-      }));
       this.isLoading = false; 
       this.cdr.detectChanges(); 
       },
@@ -49,6 +50,9 @@ export class Home implements OnInit {
       }
     })
   }
+
+
+
 
   navigateToLogin() {
     this.router.navigate(['/login']);
@@ -61,6 +65,21 @@ export class Home implements OnInit {
   viewJobDetails(jobId: number) {
     console.log('Viewing job:', jobId);
     // Navigate to job details page (you can implement this later)
+  }
+
+  updatePaginated(){
+    const starteIndex = (this.currentPage - 1 ) * this.itemsPerPage;
+    const endIndex = starteIndex + this.itemsPerPage;
+    this.paginationJobs = this.allJobs.slice(starteIndex,endIndex);
+  }
+  nextPage(){
+    this.currentPage ++;
+    this.updatePaginated();
+  }
+
+  prevPage(){
+    this.currentPage --;
+    this.updatePaginated();
   }
 
   onSearch() {
