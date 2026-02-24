@@ -1,0 +1,99 @@
+<div class="job-details-container">
+  
+  <!-- Loading State -->
+  <div *ngIf="isLoading" class="loading-state">
+    <div class="spinner"></div>
+    <p>Loading job details...</p>
+  </div>
+
+  <!-- Job Not Found -->
+  <div *ngIf="!isLoading && !job" class="error-state">
+    <h2>Job Not Found</h2>
+    <p>The job you're looking for doesn't exist or has been removed.</p>
+    <button class="btn-primary" (click)="goBack()">Go Back</button>
+  </div>
+
+  <!-- Job Details -->
+  <div *ngIf="!isLoading && job" class="job-details-content">
+    
+    <!-- Header -->
+    <div class="details-header">
+      <button class="back-button" (click)="goBack()">
+        ← Back to Jobs
+      </button>
+      
+      <div class="job-header">
+        <h1 class="job-title">{{ job.name }}</h1>
+        <h2 class="company-name">{{ job.company.name }}</h2>
+        
+        <div class="job-meta">
+          <span class="meta-item" *ngIf="job.locations && job.locations.length">
+            📍 {{ job.locations[0].name }}
+          </span>
+          <span class="meta-item" *ngIf="job.levels && job.levels.length">
+            🎯 {{ job.levels[0].name }}
+          </span>
+          <span class="meta-item">
+            📅 {{ job.publication_date | date:'mediumDate' }}
+          </span>
+        </div>
+      </div>
+
+      <div class="action-section">
+        <button class="btn-apply" (click)="applyNow()">
+          Apply Now
+        </button>
+      </div>
+    </div>
+
+    <!-- Content -->
+    <div class="details-body">
+      
+      <!-- Categories & Tags -->
+      <div class="tags-section" *ngIf="job.categories && job.categories.length">
+        <h3>Categories</h3>
+        <div class="tags">
+          <span class="tag" *ngFor="let category of job.categories">
+            {{ category.name }}
+          </span>
+        </div>
+      </div>      <!-- Job Description -->
+      <div class="description-section">
+        <h3>Job Description</h3>
+        <div class="description-content" [innerHTML]="job.contents | safeHtml"></div>
+      </div>
+
+      <!-- Additional Info -->
+      <div class="info-grid">
+        <div class="info-card" *ngIf="job.locations && job.locations.length">
+          <h4>📍 Locations</h4>
+          <ul>
+            <li *ngFor="let location of job.locations">{{ location.name }}</li>
+          </ul>
+        </div>
+
+        <div class="info-card" *ngIf="job.levels && job.levels.length">
+          <h4>🎯 Experience Levels</h4>
+          <ul>
+            <li *ngFor="let level of job.levels">{{ level.name }}</li>
+          </ul>
+        </div>
+
+        <div class="info-card" *ngIf="job.tags && job.tags.length">
+          <h4>🏷️ Tags</h4>
+          <div class="tags">
+            <span class="tag-small" *ngFor="let tag of job.tags">{{ tag.name }}</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Footer Actions -->
+    <div class="details-footer">
+      <button class="btn-secondary" (click)="goBack()">Back to Jobs</button>
+      <button class="btn-primary" (click)="applyNow()">Apply Now</button>
+    </div>
+
+  </div>
+</div>

@@ -27,12 +27,20 @@
         (click)="setActiveTab('search-jobs')">
         Search Jobs
       </button>
+
+      <!-- Beginner note: this only switches the tab label. To open the favorites page, use the button below. -->
       <button 
         class="tab-btn" 
         [class.active]="activeTab === 'favorites'"
         (click)="setActiveTab('favorites')">
         Favorites
       </button>
+
+      <!-- Open Favorites page (route) -->
+      <button class="tab-btn" (click)="router.navigate(['/favorites'])">
+        Open Favorites Page
+      </button>
+
       <button 
         class="tab-btn" 
         [class.active]="activeTab === 'applications'"
@@ -58,23 +66,22 @@
 
       <div class="jobs-container">
         <div class="job-card" *ngFor="let job of jobs">
-          
-          <div class="card-header">
+            <div class="card-header">
             <div class="title-wrapper">
               <h2 class="job-title">{{ job.name }}</h2>
               <span class="job-date">{{ job.publication_date | date:'mediumDate' }}</span>
             </div>
-            <h3 class="company-name">{{ job.company?.name }}</h3>
+            <h3 class="company-name">{{ job.company.name }}</h3>
           </div>
 
           <div class="card-badges">
-            <span class="badge" *ngIf="job.locations?.length">
+            <span class="badge" *ngIf="job.locations && job.locations.length">
               📍 {{ job.locations[0].name }}
             </span>
-            <span class="badge level" *ngIf="job.levels?.length">
+            <span class="badge level" *ngIf="job.levels && job.levels.length">
               🎯 {{ job.levels[0].name }}
             </span>
-            <span class="badge category" *ngIf="job.categories?.length">
+            <span class="badge category" *ngIf="job.categories && job.categories.length">
               📂 {{ job.categories[0].name }}
             </span>
           </div>
@@ -84,15 +91,20 @@
           </div>
 
           <div class="card-footer">
-            <button class="btn-like" title="Save Job" (click)="job.isLiked = !job.isLiked" [class.liked]="job.isLiked">
+            <!-- Beginner note: clicking the heart must call a method to save/remove the favorite in the API -->
+            <button
+              class="btn-like"
+              title="Save Job"
+              (click)="toggleLike(job)"
+              [class.liked]="job.isLiked">
               <svg viewBox="0 0 24 24" class="heart-icon">
                 <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
               </svg>
             </button>
 
             <div class="action-buttons">
-              <button class="btn-secondary">View Details</button>
-              <button class="btn-primary">Apply Now</button>
+              <button class="btn-secondary" (click)="viewJobDetails(job.id)">View Details</button>
+              <button class="btn-primary" (click)="applyToJob(job)">Apply Now</button>
             </div>
           </div>
 
@@ -100,5 +112,17 @@
       </div>
 
     </div>
+
+    <!-- Beginner note: this is the content of the Favorites tab.
+         We reuse the FavoritesComponent to show the saved jobs. -->
+    <div class="tab-content" *ngIf="activeTab === 'favorites'">
+      <app-favorites></app-favorites>
+    </div>
+
+    <!-- (Optional) Placeholder for applications tab -->
+    <div class="tab-content" *ngIf="activeTab === 'applications'">
+      <p style="padding: 16px; color: #667085;">Applications tab is not implemented yet.</p>
+    </div>
+
   </main>
 </div>

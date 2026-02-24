@@ -52,34 +52,40 @@
         <button class="search-button">Search Jobs</button>
       </div>
     </div>
-  </section>
-  <!-- Jobs Section -->
+  </section>  <!-- Jobs Section -->
   <section class="jobs-section">
     <div class="section-header">
       <h2 class="section-title">Latest Job Opportunities</h2>
       <p class="section-subtitle">Explore thousands of jobs from companies hiring now</p>
     </div>
 
-    <div class="jobs-container">
+    <!-- Loading State -->
+    <div *ngIf="isLoading" style="text-align: center; padding: 60px 20px;">
+      <div style="font-size: 24px; color: #2563eb;">Loading jobs...</div>
+      <div style="margin-top: 10px; color: #6b7280;">Please wait</div>
+    </div>
+
+    <!-- Error State -->
+    <div *ngIf="!isLoading && paginationJobs.length === 0" style="text-align: center; padding: 60px 20px;">
+      <div style="font-size: 24px; color: #dc2626;">No jobs found</div>
+      <div style="margin-top: 10px; color: #6b7280;">Try again later</div>
+    </div>
+
+    <div class="jobs-container" *ngIf="!isLoading && paginationJobs.length > 0">
       <div class="job-card" *ngFor="let job of paginationJobs">
-        <div class="card-header">
-          <div class="title-wrapper">
+        <div class="card-header">          <div class="title-wrapper">
             <h2 class="job-title">{{ job.name }}</h2>
             <span class="job-date">{{ job.publication_date | date : 'mediumDate' }}</span>
           </div>
-          <h3 class="company-name">{{ job.company?.name }}</h3>
-        </div>
-
-        <div class="card-badges">
-          <span class="badge" *ngIf="job.locations?.length"> 📍 {{ job.locations[0].name }} </span>
-          <span class="badge level" *ngIf="job.levels?.length"> 🎯 {{ job.levels[0].name }} </span>
-          <span class="badge category" *ngIf="job.categories?.length">
+          <h3 class="company-name">{{ job.company.name }}</h3>
+        </div><div class="card-badges">
+          <span class="badge" *ngIf="job.locations && job.locations.length"> 📍 {{ job.locations[0].name }} </span>
+          <span class="badge level" *ngIf="job.levels && job.levels.length"> 🎯 {{ job.levels[0].name }} </span>
+          <span class="badge category" *ngIf="job.categories && job.categories.length">
             📂 {{ job.categories[0].name }}
           </span>
-        </div>
-
-        <div class="card-body">
-          <div class="job-excerpt" [innerHTML]="(job.contents | slice : 0 : 150) + '...'"></div>
+        </div><div class="card-body">
+          <div class="job-excerpt" [innerHTML]="job.contents | slice : 0 : 150 | safeHtml"></div>
         </div>
 
         <div class="card-footer">
@@ -94,10 +100,8 @@
                 d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"
               ></path>
             </svg>
-          </button>
-
-          <div class="action-buttons">
-            <button class="btn-secondary">View Details</button>
+          </button>          <div class="action-buttons">
+            <button class="btn-secondary" (click)="viewJobDetails(job.id)">View Details</button>
             <button class="btn-primary">Apply Now</button>
           </div>
         </div>

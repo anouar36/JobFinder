@@ -4,13 +4,14 @@ import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { JobsApiResponse, Job } from '../../core/models/models';
 import { Jops } from '../../core/services/jops';
+import { SafeHtmlPipe } from '../../core/pipes/safe-html.pipe.ts-pipe';
 
 
 
 
 @Component({
   selector: 'app-home',
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, SafeHtmlPipe],
   templateUrl: './home.html',
   styleUrl: './home.css',
 })
@@ -33,20 +34,24 @@ export class Home implements OnInit {
             private jobsService: Jops,
             private cdr: ChangeDetectorRef
           ) {}
-
   ngOnInit(){
+    console.log('Home component initialized, fetching jobs...');
+    this.isLoading = true;
+    
     this.jobsService.getAllJobs().subscribe({
       next:(response:JobsApiResponse)=>{
-      console.log(' all jobs ', response.results);
-      this.allJobs = response.results;
-      this.totalPages = Math.ceil(response.results.length /  this.itemsPerPage);
-      this.updatePaginated();
-
-      this.isLoading = false; 
-      this.cdr.detectChanges(); 
+        console.log('✅ Jobs loaded successfully:', response.results.length);
+        this.allJobs = response.results;
+        this.totalPages = Math.ceil(response.results.length / this.itemsPerPage);
+        this.updatePaginated();
+        
+        this.isLoading = false; 
+        this.cdr.detectChanges(); 
       },
       error:(err)=>{
-
+        console.error('❌ Error loading jobs:', err);
+        this.isLoading = false;
+        this.cdr.detectChanges();
       }
     })
   }
@@ -61,10 +66,9 @@ export class Home implements OnInit {
   navigateToRegister() {
     this.router.navigate(['/register']);
   }
-
   viewJobDetails(jobId: number) {
     console.log('Viewing job:', jobId);
-    // Navigate to job details page (you can implement this later)
+    this.router.navigate(['/job-details', jobId]);
   }
 
   updatePaginated(){

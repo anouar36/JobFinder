@@ -1,17 +1,22 @@
-import { Component, OnInit,ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef, inject, DestroyRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { routes } from '../../app.routes';
-import { RouterModule } from '@angular/router';
 import { Router } from '@angular/router';
+
+import { Store } from '@ngrx/store';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { combineLatest, map } from 'rxjs';
+
 import { Jops } from '../../core/services/jops';
-import { JobsApiResponse,Job } from '../../core/models/models';
-import {  SafeHtmlPipe  } from '../../core/pipes/safe-html.pipe.ts-pipe';
+import { JobsApiResponse, Job } from '../../core/models/models';
 
-
+import * as FavoritesActions from '../../store/favorites/favorites.actions';
+import { selectFavoriteLevelSenior, selectFavorites } from '../../store/favorites/favorites.selectors';
+import { FavoriteOffer } from '../../core/models/models'; 
+import { FavoritesComponent } from '../favorites/favorites';
 
 interface User {
-  id: number;
+  id: string | number; 
   name: string;
   email: string;
   firstName: string;
@@ -22,64 +27,94 @@ interface User {
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [CommonModule, FormsModule,SafeHtmlPipe],
+  imports: [CommonModule, FormsModule, FavoritesComponent],
   templateUrl: './dashboard.html',
   styleUrl: './dashboard.css',
 })
 export class Dashboard implements OnInit {
+  private store = inject(Store);
+  private destroyRef = inject(DestroyRef);
 
-  userLogining = localStorage.getItem('userLogining') ? JSON.parse(localStorage.getItem('userLogining')!) : null;
+  userLogining =
+    localStorage.getItem('userLogining') ? JSON.parse(localStorage.getItem('userLogining')!) : null;
 
   jobs: Job[] = [];
 
   user: User = {
-    id:  this.userLogining.id,
-    name: this.userLogining.name,
-    email: this.userLogining.email,
-    firstName: this.userLogining.firstName,
-    lastName: this.userLogining.lastName,
-    avatar: "https://intranet.youcode.ma/storage/users/profile/thumbnail/1242-1727859879.JPG"
+    id: this.userLogining?.id,
+    name: this.userLogining?.name,
+    email: this.userLogining?.email,
+    firstName: this.userLogining?.firstName,
+    lastName: this.userLogining?.lastName,
+    avatar:
+      'https://intranet.youcode.ma/storage/users/profile/thumbnail/1242-1727859879.JPG',
   };
 
   activeTab: string = 'search-jobs';
   isLoading: boolean = true;
 
-  constructor(
-    private router: Router,
-     private jobsService: Jops,
-     private cdr: ChangeDetectorRef
-    ){}
-
   searchQuery: string = '';
   locationQuery: string = '';
 
-  ngOnInit () {
-    this.jobsService.getAllJobs().subscribe({
-      next: (response: JobsApiResponse) => {
-        console.log(' all jobs ', response.results);
+  favorites$ = this.store.select(selectFavorites);
 
-        const favorites = JSON.parse(localStorage.getItem('favoriteJobs') || '[]');
-        this.jobs = response.results.map(job => ({
-          ...job,
-          isLiked: favorites.some((fav: Job) => fav.id === job.id)
-        }));
-        this.isLoading = false; 
-        this.cdr.detectChanges(); 
-      },  
-      error: (err) => {
-        console.error('Error fetching jobs:', err);
-        this.isLoading = false;
-        this.cdr.detectChanges();
-      }
-    });
+  constructor(
+    public router: Router,
+    private jobsService: Jops,
+    private cdr: ChangeDetectorRef
+  ) {}
 
+  ngOnInit() {
+
+
+   
+
+  
+
+
+    const userId = this.getUserIdString();
+    if (!userId) {
+      this.isLoading = false;
+      return;
+    }
+
+    this.store.dispatch(FavoritesActions.loadFavorites({ userId }));
+
+    const jobs$ = this.jobsService.getAllJobs().pipe(
+      map((response: JobsApiResponse) => response.results ?? [])
+    );
+
+    combineLatest([jobs$, this.favorites$])
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: ([jobs, favorites]) => {
+          this.jobs = jobs.map((job) => ({
+            ...job,
+            isLiked: favorites.some((f) => f.offerId === job.id && f.userId === userId),
+          }));
+          this.isLoading = false;
+          this.cdr.detectChanges();
+        },
+        error: (err) => {
+          console.error('Error fetching jobs:', err);
+          this.isLoading = false;
+          this.cdr.detectChanges();
+        },
+      });
   }
 
-  loadJobs() {
-    this.jobs = this.jobs.map(job => ({
-      ...job,
-      isLiked: false
-    }));
+  private getUserIdString(): string | null {
+    const raw = localStorage.getItem('userLogining');
+    if (!raw) return null;
+
+    try {
+      const user = JSON.parse(raw);
+      const id = user?.id;
+      if (id === undefined || id === null) return null;
+      return String(id);
+    } catch {
+      return null;
+    }
   }
 
   setActiveTab(tab: string) {
@@ -90,13 +125,9 @@ export class Dashboard implements OnInit {
     console.log('Searching for:', this.searchQuery, 'in', this.locationQuery);
   }
 
-  viewJobDetails(job: Job) {
-    if (job.refs?.landing_page) {
-      window.open(job.refs.landing_page, '_blank');
-    } else {
-      console.log('Viewing details for job:', job.name);
-      alert(`Job Details:\n\nTitle: ${job.name}\nCompany: ${job.company?.name}\nLocation: ${job.locations?.[0]?.name || 'N/A'}\n\nClick "Apply Now" to visit the job application page.`);
-    }
+  viewJobDetails(jobId: number) {
+    console.log('Viewing details for job ID:', jobId);
+    this.router.navigate(['/job-details', jobId]);
   }
 
   applyToJob(job: Job) {
@@ -109,31 +140,36 @@ export class Dashboard implements OnInit {
   }
 
   toggleLike(job: Job) {
-    job.isLiked = !job.isLiked;
-    
-    if (job.isLiked) {
-      console.log('Job saved to favorites:', job.name);
-      this.saveFavoriteJob(job);
-    } else {
-      console.log('Job removed from favorites:', job.name);
-      this.removeFavoriteJob(job);
+    const userId = this.getUserIdString();
+    if (!userId) return;
+
+    let favoritesSnapshot: FavoriteOffer[] = [];
+    this.favorites$
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((favs) => (favoritesSnapshot = favs))
+      .unsubscribe();
+
+    const existing = favoritesSnapshot.find(
+      (f) => f.userId === userId && f.offerId === job.id
+    );
+
+    if (!existing) {
+      const payload: Omit<FavoriteOffer, 'id'> = {
+        userId,
+        offerId: job.id,
+        title: (job as any)?.name ?? '',
+        company: (job as any)?.company?.name ?? '',
+        location: (job as any)?.locations?.[0]?.name ?? '',
+        url: (job as any)?.refs?.landing_page ?? '',
+        dateAdded: new Date().toISOString(),
+      };
+
+      this.store.dispatch(FavoritesActions.addFavorite({ favorite: payload }));
+      return;
+    }
+
+    if (existing.id != null) {
+      this.store.dispatch(FavoritesActions.removeFavorite({ favoriteId: existing.id }));
     }
   }
-
-  saveFavoriteJob(job: Job) {
-    const favorites = JSON.parse(localStorage.getItem('favoriteJobs') || '[]');
-    const jobExists = favorites.find((fav: Job) => fav.id === job.id);
-    
-    if (!jobExists) {
-      favorites.push(job);
-      localStorage.setItem('favoriteJobs', JSON.stringify(favorites));
-    }
-  }
-
-  removeFavoriteJob(job: Job) {
-    const favorites = JSON.parse(localStorage.getItem('favoriteJobs') || '[]');
-    const updatedFavorites = favorites.filter((fav: Job) => fav.id !== job.id);
-    localStorage.setItem('favoriteJobs', JSON.stringify(updatedFavorites));
-  }
-
 }

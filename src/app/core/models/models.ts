@@ -58,3 +58,14 @@ export interface Company {
 export interface Aggregations {
   [key: string]: any; 
 }
+
+export interface FavoriteOffer {
+  id?: number;
+  userId: string;
+  offerId: number;
+  title: string;
+  company: string;
+  location: string;
+  url: string;
+  dateAdded: string;
+}

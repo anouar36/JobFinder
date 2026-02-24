@@ -29,25 +29,23 @@
       "password": "anwar36flow"
     },
     {
-      "id": "4d7f",
-      "firstName": "anouar",
-      "lastName": "ech-charai",
-      "email": "anouarechcharai@gmail.com",
-      "password": "anwar36flow"
-    },
-    {
       "id": "48c7",
       "firstName": "anouar",
       "lastName": "ech-charai",
       "email": "anwar.class36flow@gmail.com",
       "password": "anwar36flow"
-    },
+    }
+  ],
+  "favoritesOffers": [
     {
-      "id": "4742",
-      "firstName": "anouar",
-      "lastName": "ech-charai",
-      "email": "anwar.class36flow@gmail.com",
-      "password": "anwar36flow"
+      "id": "f331",
+      "userId": "48c7",
+      "offerId": 20974219,
+      "title": "Account Executive, SMB UberEats, Southern California (LA-Based)",
+      "company": "Uber",
+      "location": "",
+      "url": "https://www.themuse.com/jobs/uber/account-executive-smb-ubereats-southern-california-labased",
+      "dateAdded": "2026-02-24T09:15:24.980Z"
     }
   ]
 }
